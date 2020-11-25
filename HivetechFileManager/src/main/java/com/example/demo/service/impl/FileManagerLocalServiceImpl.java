@@ -4,6 +4,7 @@ import com.example.demo.config.FileStoreConfig;
 import com.example.demo.exception.FileStoreException;
 import com.example.demo.service.FileManagerLocalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class FileManagerLocalServiceImpl implements FileManagerLocalService {
 
     private final Path rootLocation;
+    @Value("${mimes.type}")
+    private List<String> listMimes;
 
     @Autowired
     public FileManagerLocalServiceImpl(FileStoreConfig properties) {
@@ -32,16 +40,24 @@ public class FileManagerLocalServiceImpl implements FileManagerLocalService {
     }
 
     @Override
-    public void store(MultipartFile[] files) {
-        Arrays.asList(files).forEach(item -> store(item));
+    public List<String> store(MultipartFile[] files) {
+        return Arrays.asList(files).stream().map(this::store).collect(Collectors.toList());
+//        List<String> result = new ArrayList<>();
+//        for (MultipartFile file : files) {
+//           result.add(store(file));
+//        }
+//        return result;
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public void delete(String filename) {
+
+    }
+
+    @Override
+    public String store(MultipartFile file) {
         try {
-            if (file.isEmpty()) {
-                throw new FileStoreException("Failed to store empty file.");
-            }
+
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(file.getOriginalFilename()))
                     .normalize().toAbsolutePath();
@@ -51,13 +67,19 @@ public class FileManagerLocalServiceImpl implements FileManagerLocalService {
                         "Cannot store file outside current directory.");
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, destinationFile,
-                        StandardCopyOption.REPLACE_EXISTING);
+                if (file.isEmpty()) {
+                    return file.getOriginalFilename() + " is empty, not saving";
+                }
+                if (listMimes.contains(file.getContentType())) {
+                    Files.copy(inputStream, destinationFile,
+                            StandardCopyOption.REPLACE_EXISTING);
+                    return file.getOriginalFilename() + " saved";
+                }
             }
-        }
-        catch (IOException | FileStoreException e) {
+        } catch (IOException e) {
             throw new FileStoreException("Failed to store file.", e);
         }
+        return file.getOriginalFilename() + " not an image file, it a " + file.getContentType();
     }
 
 
@@ -67,8 +89,7 @@ public class FileManagerLocalServiceImpl implements FileManagerLocalService {
             return Files.walk(this.rootLocation, 1)
                     .filter(path -> !path.equals(this.rootLocation))
                     .map(Path::toAbsolutePath);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new FileStoreException("Failed to read stored files", e);
         }
 
@@ -86,14 +107,12 @@ public class FileManagerLocalServiceImpl implements FileManagerLocalService {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }
-            else {
+            } else {
                 throw new FileStoreException(
                         "Could not read file: " + filename);
 
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new FileStoreException("Could not read file: " + filename, e);
         }
     }

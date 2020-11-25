@@ -13,7 +13,5 @@ public interface FileManagerLocalService extends BaseFileManager {
 
     Path load(String filename);
 
-    Resource loadAsResource(String filename);
-
     void deleteAll();
 }

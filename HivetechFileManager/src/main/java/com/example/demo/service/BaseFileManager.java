@@ -1,9 +1,17 @@
 package com.example.demo.service;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface BaseFileManager {
-    void store(MultipartFile file);
+import java.util.List;
+import java.util.Objects;
 
-    void store(MultipartFile[] files);
+public interface BaseFileManager <T> {
+    T store(MultipartFile file);
+
+    List<T> store(MultipartFile[] files);
+
+    void delete(String item);
+
+    Resource loadAsResource(String filename);
 }

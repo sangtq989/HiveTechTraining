@@ -15,25 +15,22 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@Controller
-public class FileManager {
+@RestController
+public class FileManagerLocal {
     @Autowired
     private FileManagerLocalService fileManagerLocalService;
 
     @GetMapping("/hello")
-    @ResponseBody
     public String hello() {
         return "hello";
     }
 
     @GetMapping("/list-file")
-    @ResponseBody
     public List<Object> listUploadedFiles() throws IOException {
         return Arrays.asList(fileManagerLocalService.loadAll().toArray());
     }
 
     @GetMapping("/files/{filename:.+}")
-    @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
         Resource file = fileManagerLocalService.loadAsResource(filename);
@@ -43,8 +40,7 @@ public class FileManager {
 
     @PostMapping("/add-file")
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile[] file, @RequestParam("description") String desc) {
-        fileManagerLocalService.store(file);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(fileManagerLocalService.store(file));
     }
 
     @ExceptionHandler(FileStoreException.class)
