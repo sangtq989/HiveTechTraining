@@ -23,8 +23,7 @@ public class FileManagerDB {
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
         Resource file = fileManagerDBService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok().body(file);
     }
 
     @PostMapping("/add-file")

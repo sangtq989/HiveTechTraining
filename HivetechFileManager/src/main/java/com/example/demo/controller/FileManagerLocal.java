@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@RestController
+@RestController()
+@RequestMapping(path = "/local-manager")
 public class FileManagerLocal {
     @Autowired
     private FileManagerLocalService fileManagerLocalService;
@@ -30,12 +31,10 @@ public class FileManagerLocal {
         return Arrays.asList(fileManagerLocalService.loadAll().toArray());
     }
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping(value = "/files/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
         Resource file = fileManagerLocalService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpg").body(file);
     }
 
     @PostMapping("/add-file")

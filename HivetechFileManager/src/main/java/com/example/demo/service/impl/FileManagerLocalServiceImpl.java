@@ -18,14 +18,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class FileManagerLocalServiceImpl implements FileManagerLocalService {
@@ -110,9 +106,8 @@ public class FileManagerLocalServiceImpl implements FileManagerLocalService {
             } else {
                 throw new FileStoreException(
                         "Could not read file: " + filename);
-
             }
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             throw new FileStoreException("Could not read file: " + filename, e);
         }
     }
