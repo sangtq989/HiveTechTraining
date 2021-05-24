@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+
+    <!-- Enable AspectJ style of Spring AOP -->
+    <aop:aspectj-autoproxy/>
+    <bean id="aspect" class="vn.hive.aop.aspect.PersonAspectClass" />
+
+    <!-- Configure Employee Bean and initialize it -->
+    <bean name="student" class="vn.hive.aop.model.Student">
+        <property name="name" value="Sang Pham Duc"></property>
+    </bean>
+    <bean name="teacher" class="vn.hive.aop.model.Teacher">
+        <property name="name" value="Sang Pham Duc Teacher"></property>
+    </bean>
+
+    <bean name="personService" class="vn.hive.aop.service.PersonService" autowire="byName"/>
+
+</beans>
