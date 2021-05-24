@@ -1,3 +1,5 @@
 /SpringWebMVC/target/*
 /SpringWebMVC/.idea/*
 /SpringWebMVC/SpringWebMVC.iml
+.idea
+*.iml
