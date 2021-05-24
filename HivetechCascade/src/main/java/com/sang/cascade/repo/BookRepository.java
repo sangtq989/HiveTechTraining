@@ -1,6 +1,6 @@
 package com.sang.cascade.repo;
 
-import com.sang.cascade.Entity.presist.Book;
+import com.sang.cascade.entity.presist.Book;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

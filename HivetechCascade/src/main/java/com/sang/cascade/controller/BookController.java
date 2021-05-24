@@ -1,6 +1,6 @@
 package com.sang.cascade.controller;
 
-import com.sang.cascade.Entity.presist.Book;
+import com.sang.cascade.entity.presist.Book;
 import com.sang.cascade.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

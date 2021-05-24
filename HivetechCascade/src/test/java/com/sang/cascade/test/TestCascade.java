@@ -1,7 +1,7 @@
 package com.sang.cascade.test;
 
-import com.sang.cascade.Entity.presist.Address;
-import com.sang.cascade.Entity.presist.Person;
+import com.sang.cascade.entity.presist.Address;
+import com.sang.cascade.entity.presist.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

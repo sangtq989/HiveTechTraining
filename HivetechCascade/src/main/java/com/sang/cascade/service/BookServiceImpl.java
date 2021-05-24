@@ -1,6 +1,6 @@
 package com.sang.cascade.service;
 
-import com.sang.cascade.Entity.presist.Book;
+import com.sang.cascade.entity.presist.Book;
 import com.sang.cascade.repo.BookRepository;
 import com.sang.cascade.repo.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
