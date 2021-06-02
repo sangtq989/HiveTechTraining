@@ -3,7 +3,9 @@ package com.sang;
 import java.io.Serializable;
 
 public class DeserializeClass implements Serializable {
+    static final long serialVersionUID = 135791L;
     private String name;
+    public String a;public String v;
     private String value;
     private ChildClass child;
 
